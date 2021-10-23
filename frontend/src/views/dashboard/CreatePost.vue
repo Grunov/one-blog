@@ -1,6 +1,6 @@
 <template lang="pug">
   .create-post
-    h1.mb-5 Create post
+    h1.mb-3 Create post
     create-form
 </template>
 

@@ -1,7 +1,7 @@
 <template lang="pug">
 app-layout
   .posts-view
-    h1.mb-5 Latest posts
+    h1.mb-3 Latest posts
     app-pagination
     posts-list.posts-view__posts-list(:posts="posts")
     app-pagination

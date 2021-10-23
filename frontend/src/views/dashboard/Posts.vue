@@ -1,6 +1,6 @@
 <template lang="pug">
 .posts-view 
-  h1.mb-5 My posts
+  h1.mb-3 My posts
   posts-list(:posts="posts")
 </template>
 

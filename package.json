@@ -1,0 +1,27 @@
+{
+  "name": "one-blog",
+  "version": "1.0.0",
+  "description": "``` Смотреть /backend/README.md ```",
+  "main": "index.js",
+  "scripts": {
+    "frontend:serve": "cd frontend && npm run serve",
+    "backend:dev": "cd backend && npm run start",
+    "start:dev": "concurrently \"npm run frontend:serve\" \"npm run backend:dev\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Grunov/one-blog.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Grunov/one-blog/issues"
+  },
+  "homepage": "https://github.com/Grunov/one-blog#readme",
+  "devDependencies": {
+    "parallelshell": "^3.0.2"
+  },
+  "dependencies": {
+    "concurrently": "^6.3.0"
+  }
+}

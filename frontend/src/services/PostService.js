@@ -11,6 +11,7 @@ export default class postService {
         return $api.get(`/post/${id}`);
     }
     static createPost(postData) {
+        console.log(postData);
         return $api.post('/post/create', postData)
     }
     static updatePost(post) {

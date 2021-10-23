@@ -5,7 +5,14 @@ form.form.create-form(@submit.prevent="submitHandler")
   .d-flex.align-items-center.mb-4(v-if="submitStatus === 'REQUEST'")
     .spinner-border.text-warning.me-3
     span Loading..
-    
+  
+  .mb-3 
+    label.form-label(for="text") Title
+    input#title.create-form__title.form-control(v-model.trim="$v.title.$model")
+
+    .invalid-feedback(v-if="$v.title.$dirty && !$v.title.required") 
+        | Field is required
+
   .mb-3 
     label.form-label(for="text") Text
     textarea#text.create-form__text.form-control(v-model.trim="$v.text.$model")
@@ -18,6 +25,9 @@ form.form.create-form(@submit.prevent="submitHandler")
 
     .invalid-feedback(v-if="$v.text.$dirty && !$v.text.maxLength") 
       | No longer than {{$v.text.$params.maxLength.max}} characters
+
+  .mb-3
+    input(type="file" accept="image/*" @change="uploadImage($event)" id="file-input")
 
   button.btn.btn-success.w-100(type="submit") Create
 </template>
@@ -36,16 +46,24 @@ import {
 export default {
   text: "create-form",
   data: () => ({
+    title: '',
     text: '',
+    image: null,
     message: null,
     submitStatus: null,
+    formData: null
   }),
   validations: {
+    title: {
+      required,
+      minLength: minLength(10),
+      maxLength: maxLength(160),
+    },
     text: {
       required,
       minLength: minLength(10),
       maxLength: maxLength(300),
-    },
+    }
   },
   computed: {
     ...mapGetters({
@@ -57,6 +75,16 @@ export default {
     ...mapActions({
       createPost: `post/${CREATE_POST_API}`,
     }),
+    uploadImage(event) {
+      let data = new FormData();
+
+      data.append('authorId', this.user.id); 
+      data.append('authorName', this.user.name); 
+      data.append('title', this.title); 
+      data.append('text', this.text); 
+      data.append('image', event.target.files[0]); 
+      this.formData = data;
+    },
     async submitHandler() {
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -65,11 +93,7 @@ export default {
       }
       try {
         this.submitStatus = "REQUEST";
-        await this.createPost({
-          authorId: this.user.id,
-          authorName: this.user.name,
-          text: this.text
-        });
+        await this.createPost(this.formData);
         if (this.errors) {
           this.submitStatus = null;
           return;

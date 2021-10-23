@@ -1,10 +1,12 @@
 <template lang="pug">
-.post-item.card.mb-3
-  .card-header.d-flex.justify-content-between
-    strong Author: {{ post.authorName }}
-    time {{ formattedDate }}
+.post-item.card.bg-dark  
+  img.card-img-top(v-if="post.image" :src="imageSrc")
   .card-body
+    .h3.card-title(v-if="post.title") {{ post.title }}
     p.card-text {{ post.text }}
+    .d-flex.justify-content-between.border-top.pt-3
+      strong.me-3 Author: {{ post.authorName }}
+      time {{ formattedDate }}
   .card-footer.d-flex.justify-content-end
     template(v-if="isCurrentUserPosts" )
       button.btn.btn-danger.me-2(@click="delPost(post.id)") Delete
@@ -39,6 +41,9 @@ export default {
       if (!this.user) return false;
       return this.user.id === this.$props.post.authorId ? true : false;
     },
+    imageSrc() {
+      return `${process.env.VUE_APP_STATIC_URL}/${this.$props.post.image}`
+    }
   },
   methods: {
     ...mapActions({

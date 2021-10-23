@@ -1,5 +1,5 @@
 <template lang="pug">
-  nav.navbar.navbar-expand-lg.navbar-light.bg-light.fixed-top
+  nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top
     .container
       router-link.navbar-brand(to="/") Oneblog
       button.navbar-toggler(type="button")

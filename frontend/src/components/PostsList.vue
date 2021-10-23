@@ -3,7 +3,7 @@
 
     template(v-if="posts.length")
       transition-group(name="posts-list")
-        post-item(
+        post-item.mb-3(
           v-for="post in posts",
           :key="post.id"
           :post="post"
@@ -39,9 +39,8 @@ export default {
     .posts-list-enter-from,
     .posts-list-leave-to {
         opacity: 0;
-        transform: translateX(130px);
     }
     .posts-list-move {
-        transition: transform 1s ease;
+        transition: opacity 1s ease;
     }
 </style>

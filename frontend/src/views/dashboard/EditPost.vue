@@ -1,6 +1,6 @@
 <template lang='pug'>
 .edit-post
-  h1.mb-5 Edit post
+  h1.mb-3 Edit post
   edit-form(v-if='post', :post='post')
 </template>
 
