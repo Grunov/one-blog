@@ -1,0 +1,169 @@
+<template lang="pug">
+    form.form.create-form(@submit.prevent="submitHandler")
+
+        .alert.alert-danger(v-if="submitStatus === 'ERROR'") Please fill the form correctly.
+        .alert.alert-danger(v-if="errors") {{errors.message}}
+        div.d-flex.align-items-center.mb-4(v-if="submitStatus === 'REQUEST'")
+            .spinner-border.text-warning.me-3
+            span Loading.. 
+
+        //- .mb-3    
+        //-     label.form-label(for="text") Text
+        //-     input.form-control(
+        //-         :class="validationNameClasses",
+        //-         type="text", 
+        //-         id="text", 
+        //-         v-model.trim="$v.text.$model"
+
+        //- .mb-3    
+        //-     label.form-label(for="text") Text
+        //-     input.form-control(
+        //-         :class="validationNameClasses",
+        //-         type="text", 
+        //-         id="text", 
+        //-         v-model.trim="$v.text.$model"
+
+        //- .mb-3    
+        //-     label.form-label(for="text") Text
+        //-     input.form-control(
+        //-         :class="validationNameClasses",
+        //-         type="text", 
+        //-         id="text", 
+        //-         v-model.trim="$v.text.$model"
+            )
+            //- .invalid-feedback(
+            //-     v-if="$v.text.$dirty && !$v.text.required"
+            //- ) Field is required
+
+            //- .invalid-feedback(
+            //-     v-if="$v.text.$dirty && !$v.text.matches"
+            //- ) Can only contain letters a-Z and numbers
+
+            //- .invalid-feedback(
+            //-     v-if="$v.text.$dirty && !$v.text.maxLength"
+            //- ) No longer than {{$v.text.$params.maxLength.max}} characters
+           
+    
+        //- .mb-3    
+        //-     label.form-label(for="ticker") Ticker
+        //-     input.form-control(
+        //-         :class="validationTickerClasses",
+        //-         type="text", 
+        //-         id="natickerme", 
+        //-         v-model.trim="$v.ticker.$model"
+        //-     )
+        //-     .invalid-feedback(
+        //-         v-if="$v.ticker.$dirty && !$v.ticker.required"
+        //-     ) Field is required
+
+        //-     .invalid-feedback(
+        //-         v-if="$v.ticker.$dirty && !$v.ticker.matches"
+        //-     ) Can only contain letters a-Z and numbers
+
+        //-     .invalid-feedback(
+        //-         v-if="$v.ticker.$dirty && !$v.ticker.minLength"
+        //-     ) No shorter than {{$v.ticker.$params.minLength.min}} characters
+    
+        //-     .invalid-feedback(
+        //-         v-if="$v.ticker.$dirty && !$v.ticker.maxLength"
+        //-     ) No longer than {{$v.ticker.$params.maxLength.max}} characters
+
+        button.btn.btn-success.w-100(type="submit") Create
+</template>
+
+<script>
+// import { required, minLength, maxLength, helpers } from 'vuelidate/lib/validators';
+import {mapActions, mapGetters } from 'vuex';
+import {
+    GET_ERRORS,
+    CREATE_POST_API
+} from '@/store/constants'
+
+// const matches = helpers.regex('matches', /^[A-Za-z0-9]*$/);
+
+export default {
+    text: 'create-form',
+    data: () => ({
+        message: null,
+        submitStatus: null
+    }),
+    // validations: {
+    //     text: {
+    //         required,
+    //         maxLength: maxLength(300),
+    //         matches
+    //     },
+    //     ticker: {
+    //         required,
+    //         minLength: minLength(3),
+    //         maxLength: maxLength(5),
+    //         matches
+    //     }
+    // },
+    computed: {
+        ...mapGetters({
+            errors: `post/${GET_ERRORS}`
+        }),
+        // validationNameClasses() {
+        //     return { 
+        //         'was-validated': this.$v.text.$dirty, 
+        //         'is-invalid': 
+        //             this.$v.text.$dirty && 
+        //             (!this.$v.text.required || 
+        //             !this.$v.text.maxLength ||
+        //             !this.$v.text.matches),
+        //         'is-valid': 
+        //             this.$v.text.$dirty && 
+        //             (this.$v.text.required && 
+        //             this.$v.text.maxLength &&
+        //             this.$v.text.matches)
+
+        //     }
+        // },
+        //  validationTickerClasses() {
+        //     return { 
+        //         'was-validated': this.$v.ticker.$dirty, 
+        //         'is-invalid': 
+        //             this.$v.ticker.$dirty && 
+        //             (!this.$v.ticker.required || 
+        //             !this.$v.ticker.minLength ||
+        //             !this.$v.ticker.maxLength||
+        //             !this.$v.ticker.matches),
+        //         'is-valid': 
+        //             this.$v.ticker.$dirty &&
+        //             (this.$v.ticker.required &&
+        //             this.$v.ticker.minLength &&
+        //             this.$v.ticker.maxLength &&
+        //             this.$v.ticker.matches)
+        //     };
+        // }
+    },
+    methods: {
+        ...mapActions({
+            createPost: `post/${CREATE_POST_API}`
+        }),
+        async submitHandler() {
+            this.$v.$touch();
+            if (this.$v.$invalid) {
+                this.submitStatus = 'ERROR';
+                return;
+            }
+            try {
+                this.submitStatus = 'REQUEST';
+                await this.createPost({
+                    text: this.text,
+                    ticker: this.ticker
+                })
+                if(this.errors) {
+                    this.submitStatus = null;
+                    return;
+                }
+                this.$router.push({text: 'post'});
+            }
+            catch(error) {
+                console.log(error);
+            }
+        }
+    }
+}
+</script>
