@@ -1,15 +1,22 @@
 <template lang="pug">
   nav.app-pagination(aria-label="Page navigation")
     ul.app-pagination__list.pagination
+      li.app-pagination__item.page-item(v-if="currentPage > 1")
+        router-link.app-pagination__link.page-link.text-dark(:to="`/posts/page/${currentPage - 1}`") Previous
+
       li.app-pagination__item.page-item(
-         v-for="page in pages",
-         :key="page"
-         :class="{'active': $route.params.number == page}"
-        )
-        template(v-if="$route.params.number != page")
+        v-for="page in pages",
+        :key="page"
+        :class="{'active': currentPage === page}"
+      )
+        template(v-if="currentPage !== page")
           router-link.app-pagination__link.page-link.text-dark(:to="`/posts/page/${page}`") {{ page }}
-        template(v-if="$route.params.number == page") 
+
+        template(v-if="currentPage === page") 
           span.app-pagination__link.page-link {{ page }}
+
+      li.app-pagination__item.page-item(v-if="currentPage < pages")
+        router-link.app-pagination__link.page-link.text-dark(:to="`/posts/page/${currentPage + 1}`") Next
 </template>
 
 <script>
@@ -24,6 +31,9 @@ export default {
     }),
     pages() {
       return Math.ceil(this.totalCount / this.limit);
+    },
+    currentPage() {
+      return parseInt(this.$route.params.number);
     }
   },
   methods: {
