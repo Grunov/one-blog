@@ -15,6 +15,11 @@ router.post(
       .isLength({min: 3, max: 30})
       .withMessage('Is required field'),
 
+    body('title')
+      .notEmpty()
+      .isLength({min: 10, max: 160})
+      .withMessage('Is required, no shorter than 10 and no longer than 160 characters'),
+
     body('text')
       .notEmpty()
       .isLength({min: 30, max: 300})

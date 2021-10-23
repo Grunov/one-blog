@@ -1,3 +1,5 @@
+const uuid = require('uuid')
+const path = require('path')
 const postService =  require('../services/post.service');
 const {validationResult} = require('express-validator');
 const ApiError = require('../exeptions/api.error');
@@ -9,7 +11,11 @@ class PostController {
             if(!errors.isEmpty()) {
                 return next(ApiError.BadRequest('Validation error', errors.array()));
             }
-            const postData = await postService.createPost(req.body);
+            const {image} = req.files;
+            let fileName = uuid.v4() + '.jpg'
+            image.mv(path.resolve(__dirname, '..', 'static', fileName))
+
+            const postData = await postService.createPost({...req.body, image: fileName});
             return res.json(postData);
         }
         catch(error) {

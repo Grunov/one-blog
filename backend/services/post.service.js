@@ -4,7 +4,14 @@ const ApiError      = require('../exeptions/api.error');
 
 class PostService {
     async createPost(data) {  
-        const post = await PostModel.create({authorId: data.authorId, authorName: data.authorName, text: data.text, date: Date.now()});
+        const post = await PostModel.create({
+          authorId: data.authorId, 
+          authorName: data.authorName, 
+          title: data.title, 
+          image: data.image, 
+          text: data.text, 
+          date: Date.now()
+        });
         return post;
     }
 
@@ -37,7 +44,7 @@ class PostService {
 
 
     async getAllPosts(page, limit) {
-        let posts = await PostModel.find().limit(limit).skip((page-1)*limit);
+        let posts = await PostModel.find().sort([['date', 'desc']]).limit(limit).skip((page-1)*limit);
         let totalCount = await PostModel.countDocuments();
         posts = posts.map(post => {
           return new PostDto(post);
@@ -50,7 +57,7 @@ class PostService {
     }
 
     async getAllPostsByUserId(userId) { 
-      let posts = await PostModel.find({authorId: userId});
+      let posts = await PostModel.find({authorId: userId}).sort([['date', 'desc']]);
       posts = posts.map(post => {
         return new PostDto(post);
       });
