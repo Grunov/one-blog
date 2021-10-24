@@ -2,7 +2,7 @@
   .posts-list 
 
     template(v-if="posts.length")
-      transition-group(name="posts-list")
+      transition-group(name="bounce")
         post-item.mb-3(
           v-for="post in posts",
           :key="post.id"
@@ -32,15 +32,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .posts-list-enter-active,
-    .posts-list-leave-active {
-        transition: all .3s ease;
-    }
-    .posts-list-enter-from,
-    .posts-list-leave-to {
-        opacity: 0;
-    }
-    .posts-list-move {
-        transition: opacity 1s ease;
-    }
+    .bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 </style>

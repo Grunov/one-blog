@@ -5,7 +5,10 @@ app-layout
     small {{formattedDate}}
     hr
     br
-    p {{post.text}}
+    .post-view__media
+      img.img-fluid.mb-4(v-if="post.image" :src="imageSrc")
+    .post-view__text
+      p {{post.text}}
 
 </template>
 
@@ -24,6 +27,9 @@ export default {
     ...mapGetters({
       post: `post/${GET_POST}`,
     }),
+    imageSrc() {
+      return `${process.env.VUE_APP_STATIC_URL}/${this.post.image}`
+    }
   },
   methods: {
     ...mapActions({
@@ -43,5 +49,13 @@ export default {
 .post-view {
   max-width: 640px;
   margin: 0 auto;
+
+  &__text{
+    
+    & * {
+      font-size: 18px;
+      word-break: break-all;
+    }
+  }
 }
 </style>

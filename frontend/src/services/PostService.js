@@ -4,8 +4,8 @@ export default class postService {
     static fetchPosts(page, limit) {
         return $api.get(`/post?page=${page}&limit=${limit}`);
     }
-    static fetchPostsByUserId(userId) {
-      return $api.get(`/post/user/${userId}`);
+    static fetchPostsByUserId(userId, page, limit) {
+      return $api.get(`/post/user/${userId}?page=${page}&limit=${limit}`);
   }
     static fetchPost(id) {
         return $api.get(`/post/${id}`);

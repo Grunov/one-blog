@@ -115,4 +115,8 @@ export default {
       resize: none;
     }
   }
+
+  .form-control {
+    color: var(--dark);
+  }
 </style>

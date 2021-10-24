@@ -85,10 +85,11 @@ export default {
       }
       try {
           this.submitStatus = 'REQUEST';
-          await this.signin({
+          const response = await this.signin({
             email: this.email,
             password: this.password
           })
+          console.log(response);
           if(this.errors) {
               this.submitStatus = null;
               return;
