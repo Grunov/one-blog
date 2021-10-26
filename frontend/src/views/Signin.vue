@@ -21,5 +21,9 @@ export default {
 <style lang="scss" scoped>
   .signin-view {
     margin: auto;
+
+    &__form {
+      width: 300px;
+    }
   }
 </style>

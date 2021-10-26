@@ -1,10 +1,13 @@
 <template lang="pug">
 app-layout
   .post-view
-    h1 One post by {{post.authorName}}. 
-    small {{formattedDate}}
-    hr
-    br
+    .post-view__header
+      h1.h2.post-view__title.mb-4(v-if="post.title") {{ post.title }}
+      .d-flex.justify-content-start.border-bottom.pb-2.mb-4
+        strong.me-3 
+          | Author:
+          span.text-info.ms-2 {{ post.authorName }} 
+        time.text-warning {{ formattedDate }}
     .post-view__media
       img.img-fluid.mb-4(v-if="post.image" :src="imageSrc")
     .post-view__text

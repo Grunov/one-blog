@@ -73,7 +73,8 @@ class PostController {
     async getAllPostsByUserId(req, res, next) {
       try {
           const {id} = req.params; 
-          const posts = await postService.getAllPostsByUserId(id);
+          const {page, limit} = req.query;
+          const posts = await postService.getAllPostsByUserId(id, parseInt(page), parseInt(limit));
           return res.json(posts);
       }
       catch (error) {

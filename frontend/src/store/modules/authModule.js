@@ -5,6 +5,8 @@ import axios from 'axios';
 import {
   status,
   _set_status,
+  _set_errors,
+  _set_error_message,
   _set_auth,
   _set_user,
   SIGNIN,
@@ -14,6 +16,7 @@ import {
   GET_AUTH_STATE,
   GET_USER,
   GET_ERRORS,
+  GET_ERROR_MESSAGE,
   GET_STATUS
 } from '@/store/constants';
 
@@ -21,19 +24,22 @@ export default {
   namespaced: true,
   state: () => ({
     status: status.listen,
-    error: null,
+    errors: [],
+    errorMessage: null,
     user: null,
     isAuth: false
   }),
   mutations: {
-    [_set_status](state, status, error) {
+    [_set_status](state, status) {
       state.status = status;
-      if (error) {
-        state.error = error.response?.data?.message;
-        if ((process.env.NODE_ENV !== 'production')) {
-          console.error(error);
-        }
-      }
+      state.errors = [];
+      state.errorMessage = null;
+    },
+    [_set_errors](state, error) {
+      state.errors = error.response.data.errors;
+    },
+    [_set_error_message](state, error) {
+      state.errorMessage = error.response.data.message;
     },
     [_set_auth](state, bool) {
       state.isAuth = bool;
@@ -53,7 +59,9 @@ export default {
         commit(_set_user, response.data.user);
       }
       catch (error) {
-        commit(_set_status, status.error, error);
+        commit(_set_status, status.error);
+        commit(_set_error_message, error);
+        commit(_set_errors, error);
       }
     },
     async [SIGNIN]({ commit }, { email, password }) {
@@ -66,7 +74,8 @@ export default {
         commit(_set_user, response.data.user);
       }
       catch (error) {
-        commit(_set_status, status.error, error);
+        commit(_set_status, status.error);
+        commit(_set_error_message, error);
       }
     },
     async [SIGNOUT]({ commit }) {
@@ -79,7 +88,8 @@ export default {
         commit(_set_user, null);
       }
       catch (error) {
-        commit(_set_status, status.error, error);
+        commit(_set_status, status.error);
+        commit(_set_errors, error);
       }
     },
     async [CHEK_AUTH]({ commit }) {
@@ -92,14 +102,15 @@ export default {
         commit(_set_user, response.data.user);
       }
       catch (error) {
-        commit(_set_status, status.error, error);
+        commit(_set_status, status.error);
       }
     }
   },
   getters: {
     [GET_AUTH_STATE]: (state) => state.isAuth,
     [GET_USER]: (state) => state.user,
-    [GET_ERRORS]: (state) => state.error,
+    [GET_ERRORS]: (state) => state.errors,
+    [GET_ERROR_MESSAGE]: (state) => state.errorMessage,
     [GET_STATUS]: (state) => state.status
   }
 }

@@ -56,12 +56,17 @@ class PostService {
         };
     }
 
-    async getAllPostsByUserId(userId) { 
-      let posts = await PostModel.find({authorId: userId}).sort([['date', 'desc']]);
-      posts = posts.map(post => {
-        return new PostDto(post);
-      });
-      return posts;
+    async getAllPostsByUserId(userId, page, limit) { 
+      let posts = await PostModel.find({authorId: userId}).sort([['date', 'desc']]).limit(limit).skip((page-1)*limit);
+        let totalCount = await PostModel.countDocuments();
+        posts = posts.map(post => {
+          return new PostDto(post);
+        });
+
+        return {
+          posts,
+          totalCount
+        };
   }
 }
 

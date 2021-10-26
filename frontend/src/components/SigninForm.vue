@@ -1,7 +1,8 @@
 <template lang="pug">
   form.signin-form.form(@submit.prevent="submitHandler")
     .alert.alert-danger(v-if="submitStatus === 'ERROR'") Please fill the form correctly.
-    .alert.alert-danger(v-if="errors") {{errors.message}}
+    .alert.alert-danger(v-if="errorMessage") {{errorMessage}}
+
     div.d-flex.align-items-center.mb-4(v-if="submitStatus === 'REQUEST'")
         .spinner-border.text-warning.me-3
         span Loading.. 
@@ -47,7 +48,7 @@ import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
 import { mapActions, mapGetters } from 'vuex';
 import {
   SIGNIN,
-  GET_ERRORS
+  GET_ERROR_MESSAGE
 } from '@/store/constants'
 
 export default {
@@ -70,7 +71,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-        errors: `post/${GET_ERRORS}`
+        errorMessage: `auth/${GET_ERROR_MESSAGE}`
     }),
   },
   methods: {
@@ -85,16 +86,16 @@ export default {
       }
       try {
           this.submitStatus = 'REQUEST';
-          const response = await this.signin({
+          await this.signin({
             email: this.email,
             password: this.password
           })
-          console.log(response);
-          if(this.errors) {
-              this.submitStatus = null;
-              return;
+          if(this.errorMessage) {
+            this.submitStatus = null;
+            return;
           }
-          this.$router.push({name: 'dashboard'})
+          this.submitStatus = 'SUCCESS';
+          this.$router.push({name: 'dashboard'});
       }
       catch(error) {
           console.log(error);

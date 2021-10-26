@@ -1,23 +1,23 @@
 <template lang="pug">
-.post-item.card.bg-dark  
-  .card-body
-    .d-flex.justify-content-between.border-bottom.pb-2
-      strong 
-            | Author:
-            span.text-info.ms-2 {{ post.authorName }} 
-      time.text-warning.me-3 {{ formattedDate }}
-       
-  img.card-img-top(v-if="post.image" :src="imageSrc")
+  .post-item.card.bg-dark  
+    .card-body
+      .d-flex.justify-content-between.border-bottom.pb-2
+        strong 
+          | Author:
+          span.text-info.ms-2 {{ post.authorName }} 
+        time.text-warning.me-3 {{ formattedDate }}
+        
+    img.card-img-top(v-if="post.image" :src="imageSrc")
 
-  .card-body
-    .h3.card-title(v-if="post.title") {{ post.title }}
-    p.card-text {{ post.text }}
-    
-  .card-footer.d-flex.justify-content-end
-    template(v-if="isCurrentUserPosts" )
-      button.btn.btn-danger.me-2(@click="delPost(post.id)") Delete
-      router-link(:to='`/dashboard/my-posts/edit/${post.id}`').btn.btn-warning.me-2(@click="deletePost(post.id)") Edit
-    router-link.btn.btn-outline-info(:to="`/posts/${post.id}`") Show more...
+    .card-body
+      .h3.card-title(v-if="post.title") {{ post.title }}
+      p.card-text {{ post.text }}
+      
+    .card-footer.d-flex.justify-content-end
+      template(v-if="isCurrentUserPosts" )
+        button.btn.btn-danger.me-2(@click="delPost(post.id)") Delete
+        router-link(:to='`/dashboard/my-posts/edit/${post.id}`').btn.btn-warning.me-2(@click="deletePost(post.id)") Edit
+      router-link.btn.btn-outline-info(:to="`/posts/${post.id}`") Show more...
 
 </template>
 
@@ -54,11 +54,15 @@ export default {
   },
   methods: {
     ...mapActions({
-      deletePost: `post/${DELETE_POST_API}`
+      deletePost: `post/${DELETE_POST_API}`,
+      deleteMyPost: `mypost/${DELETE_POST_API}`,
     }),
     delPost(id) {
       const confirm = window.confirm('Are you sure you want to delete this post?');
       if(confirm) {
+        if(this.isCurrentUserPosts) {
+          this.deleteMyPost(id);
+        }
         this.deletePost(id);
       }
       return false;

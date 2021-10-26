@@ -67,22 +67,11 @@ export default {
       state.post = null;
     },
     [_delete_post](state, id) {
-      state.userPosts = state.userPosts.filter((post) => post.id !== id)
+      const filteredPosts = state.posts.filter((post) => post.id !== id);
+      state.posts = filteredPosts;
     }
   },
   actions: {
-    // async [GET_ALL_POSTS_API]({ commit, state }, page = 1, limit = state.limit) {
-    //   commit(_set_status, status.request);
-    //   try {
-    //     const response = await PostService.fetchPosts(page, limit)
-    //     commit(_set_status, status.success);
-    //     commit(_set_posts, response.data);
-    //   }
-    //   catch (error) {
-    //     commit(_set_status, status.error);
-    //     commit(_set_errors, error);
-    //   }
-    // },
     async [GET_ALL_POSTS_API]({ commit, state }, userId, page = 1, limit = state.limit) {
       commit(_set_status, status.request);
       try {

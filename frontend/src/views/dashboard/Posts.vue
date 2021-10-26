@@ -27,8 +27,6 @@ export default {
     }),
   },
   mounted() {
-    console.log(this.user.id);
-    console.log(this.posts);
     this.getUserPostsFromApi(this.user.id);
   },
   components: {

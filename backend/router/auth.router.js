@@ -5,9 +5,15 @@ const {body} = require('express-validator');
 
 
 router.post('/signup',
-    body('name').isLength({min: 3, max: 32}),
-    body('email').isEmail(),
-    body('password').isLength({min: 3, max: 32}),
+    body('name')
+    .isLength({min: 5, max: 32})
+    .withMessage('Is required, no shorter than 5 and no longer than 32 characters'),
+    body('email')
+    .isEmail()
+    .withMessage('Is required, field must be correct email'),
+    body('password')
+    .isLength({min: 5, max: 32})
+    .withMessage('Is required, no shorter than 5 and no longer than 32 characters'),
     authController.signup
 );
 router.post('/signin', authController.signin);

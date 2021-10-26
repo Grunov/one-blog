@@ -8,9 +8,11 @@ export const status = {
 // Status mutations
 export const _set_status = '_set_status'
 export const _set_errors = 'set_errors'
+export const _set_error_message = '_set_error_message'
 
 // Status getters 
 export const GET_ERRORS = 'GET_ERRORS'
+export const GET_ERROR_MESSAGE = 'GET_ERROR_MESSAGE'
 export const GET_STATUS = 'GET_STATUS'
 
 // Auth mutations

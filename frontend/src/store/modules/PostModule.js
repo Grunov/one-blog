@@ -67,7 +67,8 @@ export default {
       state.post = null;
     },
     [_delete_post](state, id) {
-      state.userPosts = state.userPosts.filter((post) => post.id !== id)
+      const filteredPosts = state.posts.filter((post) => post.id !== id);
+      state.posts = filteredPosts;
     }
   },
   actions: {
