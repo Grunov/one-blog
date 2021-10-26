@@ -27,8 +27,8 @@
       input.form-control#password(
         type="password",
         v-model.trim="$v.password.$model",
-        autocomplete="current-password"
         :class="{'is-invalid': $v.password.$dirty && (!$v.password.required || !$v.password.maxLength || !$v.password.minLength )}",
+        autocomplete="current-password"
       )
       .invalid-feedback(
           v-if="$v.password.$dirty && !$v.password.required"
